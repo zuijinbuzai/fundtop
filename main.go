@@ -1,7 +1,7 @@
 package main
 
 import (
-	"zuijinbuzai/fundtop/api"
+	"github.com/zuijinbuzai/fundtop/api"
 	"os"
 	"os/exec"
 	"fmt"
