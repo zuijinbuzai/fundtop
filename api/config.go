@@ -36,7 +36,7 @@ func LoadConfig() (*Config, error) {
 		newConfig()
 	}
 
-	data, err := ioutil.ReadFile("fundconfig.yaml")
+	data, err := ioutil.ReadFile(configpath)
 	if err != nil {
 		return nil, err
 	}
