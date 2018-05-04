@@ -39,7 +39,7 @@ FundConfig:
 
   #持有的基金
   Owned: [002379, 020009]
-  
+~~~
 
 ## 输出展示
-![](https://github.com/zuijinbuzai/fundtop/img/output.jpg)
+![](https://github.com/zuijinbuzai/fundtop/blob/master/img/output.jpg)
