@@ -1,0 +1,25 @@
+# vim
+*.swp
+*.swo
+
+# build artifacts
+cover
+release
+
+# IntelliJ IDEA
+.idea
+*.iml
+.vscode
+vendor
+*.exe
+
+debug
+Gopkg.lock
+Gopkg.toml
+
+fundtop.json
+fundtop.yaml
+fundtop.db
+fundtop.lock
+
+data
