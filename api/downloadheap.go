@@ -3,7 +3,7 @@ package api
 import (
 	"sync"
 	"container/heap"
-	"zuijinbuzai/fundtop/api/types"
+	"github.com/zuijinbuzai/fundtop/api/types"
 )
 
 type downloadHeap struct {

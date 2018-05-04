@@ -3,7 +3,7 @@ package api
 import (
 	"github.com/coreos/bbolt"
 	"fmt"
-	"zuijinbuzai/fundtop/api/types"
+	"github.com/zuijinbuzai/fundtop/api/types"
 	"time"
 	"os"
 	"encoding/json"

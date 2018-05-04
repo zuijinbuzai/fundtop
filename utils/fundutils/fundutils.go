@@ -3,8 +3,8 @@ package fundutils
 import (
 	"io/ioutil"
 	"encoding/json"
-	"zuijinbuzai/fundtop/utils"
-	"zuijinbuzai/fundtop/utils/httputils"
+	"github.com/zuijinbuzai/fundtop/utils"
+	"github.com/zuijinbuzai/fundtop/utils/httputils"
 )
 
 const (

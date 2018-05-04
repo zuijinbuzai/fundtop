@@ -1,7 +1,7 @@
 package api
 
 import (
-	"zuijinbuzai/fundtop/api/types"
+	"github.com/zuijinbuzai/fundtop/api/types"
 	"math"
 )
 
