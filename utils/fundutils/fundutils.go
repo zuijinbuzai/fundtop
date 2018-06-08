@@ -65,7 +65,9 @@ func GetAllFundList() (map[string] []string, error) {
 		if v[3] == "分级杠杆"{
 			continue
 		}
-		fundListMap[v[0]] = v
+		//if v[1][len(v[1]) - 1] == 'C' {
+			fundListMap[v[0]] = v
+		//}
 	}
 	return fundListMap, err
 }

@@ -17,6 +17,8 @@ type Fund struct {
 	FArray		[]*FundItem
 
 	Rank		string
+
+	Earnings	float64
 }
 
 type FundItem struct {

@@ -26,7 +26,7 @@ var (
 )
 
 var (
-	config 		*Config
+	config 			*Config
 )
 
 func Work() {
@@ -35,61 +35,39 @@ func Work() {
 		return
 	}
 
-	fmt.Print("编号   ", utils.FormatName("名称"), " ")
-	for i := 0; i < config.Base.ShowDays; i++ {
-		fmt.Print(fmt.Sprintf("%dD     ", i))
-	}
-	fmt.Print("| ", "涨跌       ", "涨跌2  ")
-	fmt.Println()
-
+	outputHeader()
 	markRank(arrayData)
 	SortList(&arrayData)
 
+	count := 0
 	for _, v := range arrayData {
 		if FilterResult(v) && !FilterOwned(v) {
-			outputOneLine(v)
+			if count < config.Base.Limit {
+				outputOneLine(v)
+				count++
+			}
 		}
 	}
-	fmt.Println("---------------------------------------------------------------------------------------------------持有", len(config.FundConfig.Owned), "支")
+	//fmt.Println("----------------------------------------------------------------------------------------------------------------------")
+	//for i := len(arrayData) - 1; i >= len(arrayData) - config.Base.Limit && i >= 0; i-- {
+	//	v := arrayData[i];
+	//	if FilterResult(v) && !FilterOwned(v) {
+	//		if count < config.Base.Limit {
+	//			outputOneLine(v)
+	//			count++
+	//		}
+	//	}
+	//}
+
+	fmt.Println("----------------------------------------------------------------------------------------------------------------------")
 	for _, v := range arrayData {
 		if FilterOwned(v) {
 			outputOneLine(v)
 		}
 	}
-	fmt.Println("---------------------------------------------------------------------------------------------------持有", len(config.FundConfig.Owned), "支")
-}
-
-func markRank(mapData []*types.Fund) {
-	SortByZf(&mapData)
-	for i, v := range mapData {
-		if i < 3 {
-			v.Rank = "***"
-		}
-		if i >= len(mapData) - 3 {
-			v.Rank = "xxx"
-		}
-	}
-}
-
-func outputOneLine(v *types.Fund) {
-	dayText := getDDays(v)
-	txt := fmt.Sprintf("%d天(%s)", v.Delta, utils.GetAbsText(v.DeltaSum))
-	txt2 := fmt.Sprintf("%02d天(%s)", v.Delta2, utils.GetAbsText(v.DeltaSum2))
-	fmt.Println(v.Code, utils.FormatName(v.Name), dayText, txt, txt2, v.Rank)
-}
-
-func getDDays(fi *types.Fund) string {
-	if len(fi.FArray) < config.Base.ShowDays {
-		return "no data          "
-	}
-	text := ""
-	for i := 0; i < config.Base.ShowDays; i++ {
-		val1 := (fi.FArray[i].Dwjz/fi.FArray[i+1].Dwjz-1) * 100
-		text += utils.GetAbsText(val1)
-		text += "  "
-	}
-	text += "|"
-	return text
+	msg := fmt.Sprintf("----------------------------------------------------" +
+		" 持有%d只", len(config.OwnedFundMap))
+	fmt.Println(msg)
 }
 
 func getAllFundData() ([]*types.Fund, error) {
@@ -138,7 +116,7 @@ func getAllFundData() ([]*types.Fund, error) {
 	}
 	wg.Wait()
 	DBPutArray(result)
-	fmt.Printf("\rDownloadAllFund finish, %d支 use = %f s\n", dlCount, time.Now().Sub(t).Seconds())
+	fmt.Printf("\rDownloadAllFund finish, %d支 use = %f s,  %s\n", dlCount, time.Now().Sub(t).Seconds(), time.Now().Format("2006-01-02 15:04:05"))
 
 	return result, nil
 }
@@ -180,7 +158,7 @@ func threadDownFund(dh *downloadHeap, wg *sync.WaitGroup, dlCount *int) {
 			lock.Lock()
 
 			*dlCount++
-			if *dlCount % 50 == 0 {
+			if *dlCount % 100 == 0 {
 				fmt.Printf("\rdlCount=%d", *dlCount)
 			}
 			lock.Unlock()
@@ -207,6 +185,7 @@ func parseHtmlFundDetail(code string) ([]*types.FundItem) {
 	fundArr := []*types.FundItem{}
 
 	//解析table
+	first := true
 	for {
 		pos = strings.Index(text, "<tr>")
 		if pos == -1 {
@@ -231,6 +210,17 @@ func parseHtmlFundDetail(code string) ([]*types.FundItem) {
 
 			switch i {
 			case 0:
+				//2018-06-01
+				timeLayout := "2006-01-02"
+				loc, _ := time.LoadLocation("Local")
+				theTime, _ := time.ParseInLocation(timeLayout, text2, loc)
+				delt := time.Now().Unix() - theTime.Unix()
+				//10天没更新
+				if first && delt > 60 * 60 * 24 * 10 {
+					//fmt.Println(code, theTime.Year(), theTime.Month(), theTime.Day())
+					return nil
+				}
+				first = false;
 				//fi.Time = text2
 			case 1:
 				fi.Dwjz = utils.ParseFloat(text2)

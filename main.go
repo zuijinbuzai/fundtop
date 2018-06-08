@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/zuijinbuzai/fundtop/api"
+	"fmt"
 	"os"
 	"os/exec"
-	"fmt"
+	"github.com/zuijinbuzai/fundtop/api"
 )
 
 func main() {

@@ -4,6 +4,7 @@ import (
 	"os"
 	"unicode"
 	"fmt"
+	"math"
 )
 
 func IsFileExist(path string) bool {
@@ -42,9 +43,31 @@ func FormatName(name string) string {
 }
 
 func GetAbsText(val2 float64) string {
-	valText2 := fmt.Sprintf("%0.2f", val2 + 0.005);
+	valText2 := ""
+	if math.Abs(val2) >= 10 {
+		valText2 = fmt.Sprintf("%0.1f", val2 + 0.05);
+	} else {
+		valText2 = fmt.Sprintf("%0.2f", val2 + 0.005);
+	}
 	if val2 >= 0 {
-		valText2 = "+" + valText2
+		valText2 = "\033[1;31m" + "+" + valText2 + "\033[0m"
+	} else {
+		valText2 = "\033[1;32m" + valText2 + "\033[0m"
+	}
+	return valText2
+}
+
+func GetAbsText2(val2 float64) string {
+	valText2 := ""
+	if math.Abs(val2) >= 10 {
+		valText2 = fmt.Sprintf("%0.1f", val2 + 0.05);
+	} else {
+		valText2 = fmt.Sprintf("%0.2f", val2 + 0.005);
+	}
+	if val2 >= 0 {
+		valText2 = "\033[1;31m" + "+" + valText2 + "\033[0m"
+	} else {
+		valText2 = "\033[1;32m" + valText2 + "\033[0m"
 	}
 	return valText2
 }
